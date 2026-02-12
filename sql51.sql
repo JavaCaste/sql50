@@ -108,8 +108,8 @@ SELECT
 ROW_NUMBER() OVER (
     PARTITION BY table_catalog, table_schema, table_name
     -- Columns that identify a duplicate
-    ORDER BY table_catalog DESC
-    -- Column that decide row_number order (e.g., the most recent)
+    ORDER BY LAST_DDL DESC
+    -- Column that decide row_number order
 ) as OCCURENCE_ID
 FROM BIGDATA_OPERATIONAL.PUBLIC.TABLAS_HUERFANAS
 qualify OCCURENCE_ID > 1
