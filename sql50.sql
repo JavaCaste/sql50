@@ -86,6 +86,7 @@ Output:
 
 
 
+
 -- Use Lag() window function to get the previous day's temperature
 WITH
 temp1 as (
@@ -95,13 +96,18 @@ LAG(recordDate) OVER (order by recordDate) AS prev_recordDate,
 LAG(temperature) OVER (order by recordDate) AS prev_temperature
 from data.public.temperature
 
-qualify recordDate = prev_recordDate + INTERVAL '1 day'
+qualify 
+temperature > prev_temperature AND
+recordDate = prev_recordDate + INTERVAL '1 day'
+-- filter at the beginning of the CTE
 
 order by recorddate desc
 )
-SELECT id   -- ,recordDate, temperature, prev_recordDate, prev_temperature 
+SELECT id   ,recordDate, temperature, prev_recordDate, prev_temperature 
 FROM temp1
 --where recordDate = prev_recordDate + INTERVAL '1 day'
+
+
 
 
 
